@@ -1,14 +1,22 @@
 <!-- -->
-<div>
-    <table class="table">
-        <thead>
-            <td>Linea</td>
-            <td>Descrizione</td>
-        </thead>
-        <tbody>
-        <tr ng-repeat="line in ctrl.lines">
-            <td>{{line.line}}</td><td>{{line.desc}}</td>
-        </tr>
-        <tbody>
-    </table>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <table class="table">
+                <thead>
+                    <td>Linea</td>
+                    <td>Descrizione</td>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="line in ctrl.lines">
+                        <td>{{line.line}}</td>
+                        <td>{{line.desc}}</td>
+                    </tr>
+                    <tbody>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <leaflet height="480px"></leaflet>
+        </div>
+    </div>
 </div>
