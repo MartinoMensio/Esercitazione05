@@ -15,14 +15,18 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.controller('MainCtrl', ['$scope', 'DataProvider',
     function ($scope, DataProvider) {
-        /* */
+        this.lines = DataProvider.getLines();
     }
 ]);
 
 app.factory('DataProvider', ['Linee',
     function (linee) {
         // console.log(linee);
-        return {};
+        return {
+            getLines: function() {
+                return linee.lines;
+            }
+        };
     }
 ]);
 
