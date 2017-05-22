@@ -2,6 +2,29 @@ var app = angular.module('App');
 
 app.factory('DataProvider', ['Linee',
     function (linee) {
+
+        // this function builds a GeoJson polyline from a line
+        var lineStringFeature = function (line) {
+            result = {
+                type: "Feature",
+                properties: {
+                    name: "line"
+                },
+                geometry: {
+                    type: "LineString",
+                    coordinates: []
+                }
+            }
+            line.stops.forEach(function (stopId) {
+                // get coordinates
+                stop = linee.stops.find(s => s.id === stopId)
+                if (stop) {
+                    result.geometry.coordinates.push([stop.latLng[1], stop.latLng[0]]);
+                }
+            }, this);
+            return result;
+        }
+
         // console.log(linee);
         return {
             getLines: function () {
@@ -23,8 +46,28 @@ app.factory('DataProvider', ['Linee',
                         fillOpacity: 0.7
                     }
                 }
-            }
+            },
             // TODO add methods to get geoJSON for lines
+            getLineByIdAsGeoJson: function (lineId) {
+                line = linee.lines.find(l => l.line === lineId);
+                if (line === undefined) {
+                    return {};
+                }
+
+                var lineFeature = lineStringFeature(line);
+                var features = [];
+                features.push(lineFeature);
+                return {
+                    data: {
+                        type: "FeatureCollection", features: features
+                    },
+                    style: {
+                        "color": "#ff7800",
+                        "weight": 5,
+                        "opacity": 0.65
+                    }
+                }
+            }
         };
     }
 ]);
