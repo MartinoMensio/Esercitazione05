@@ -1,22 +1,22 @@
 <!-- -->
 <div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            <table class="table">
-                <thead>
-                    <td>Linea</td>
-                    <td>Descrizione</td>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="line in ctrl.lines" ng-click="ctrl.showLine(line.line)">
-                        <td>{{line.line}}</td>
-                        <td>{{line.desc}}</td>
-                    </tr>
-                <tbody>
-            </table>
-        </div>
-        <div class="col-sm-6">
-            <leaflet geojson="ctrl.data.geojson" markers="ctrl.data.markers" lf-center="ctrl.center" bounds="ctrl.bounds" height="480px"></leaflet>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-sm-6">
+			<table class="table">
+				<thead>
+					<td>Linea</td>
+					<td>Descrizione</td>
+				</thead>
+				<tbody>
+					<tr ng-repeat="line in ctrl.lines" ng-click="ctrl.showLine(line.line)">
+						<td>{{line.line}}</td>
+						<td>{{line.desc}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-sm-6">
+			<leaflet geojson="ctrl.data.geojson" markers="ctrl.data.markers" lf-center="ctrl.center" bounds="ctrl.bounds" height="480px"></leaflet>
+		</div>
+	</div>
 </div>

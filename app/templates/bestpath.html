@@ -1,19 +1,24 @@
-<!-- -->
+<!-- This div contains the view of the best path, which will be calculated after the user selects the source and the destination -->
 <div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            <table class="table">
-                <thead>
-                    <td>Linea</td>
-                    <td>Descrizione</td>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="line in ctrl.lines">
-                        <td>{{line.line}}</td>
-                        <td>{{line.desc}}</td>
-                    </tr>
-                <tbody>
-            </table>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-sm-6">
+			<form>
+				<div class="form-group">
+					<label for="formGroupExampleInput">Source Path:</label>
+					<input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input" required>
+				</div>
+				<div class="form-group">
+					<label for="formGroupExampleInput2">Destination Path:</label>
+					<input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input" required>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</form>
+			<a id="advanced-option-link" href="#">Advanced Options</a>
+		</div>
+		<div class="col-sm-6">
+			<leaflet geojson="ctrl.geojson" lf-center="ctrl.center" bounds="ctrl.bounds" height="480px"></leaflet>
+		</div>
+	</div>
 </div>
