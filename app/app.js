@@ -7,9 +7,9 @@ app.config(function ($routeProvider, $locationProvider) {
             controller: 'MainCtrl',
             controllerAs: 'ctrl'
         })
-        .when('/bestpath',{
+        .when('/bestpath', {
             templateUrl: 'templates/bestpath.html',
-            controller: "BestPathCtrl",
+            controller: 'BestPathCtrl',
             controllerAs: 'ctrl' /* *** Opportuno cambiare nome ? Rispondete qui a fianco... *** */
         })
         .when('/:lineId', {

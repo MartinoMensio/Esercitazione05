@@ -2,6 +2,9 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-6">
+			<div ng-controller="BestPathCtrl">
+				{{ welcomeMessage }}
+			</div>
 			<form>
 				<div class="form-group">
 					<label for="formGroupExampleInput">Source Path:</label>
@@ -12,7 +15,7 @@
 					<input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input" required>
 				</div>
 				<div class="form-group">
-					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="submit" class="btn btn-primary" ng-click="ctrl.showBestPath()">Submit</button>
 				</div>
 			</form>
 			<a id="advanced-option-link" href="#">Advanced Options</a>
