@@ -7,6 +7,11 @@ app.config(function ($routeProvider, $locationProvider) {
             controller: 'MainCtrl',
             controllerAs: 'ctrl'
         })
+        .when('/bestpath',{
+            templateUrl: 'templates/bestpath.html',
+            controller: "MainCtrl",
+            controllerAs: 'ctrl'
+        })
         .otherwise({ redirectTo: "/" });
 
     // configure html5 to get links working on jsfiddle
@@ -20,5 +25,3 @@ app.directive('myDirective', function () {
   };
   */
 });
-
-
