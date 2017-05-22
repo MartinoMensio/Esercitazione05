@@ -1,6 +1,4 @@
-/* Put your css in here */
-
-
+/* general css */
 body {
     /* padding-top: 70px; */ /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
@@ -18,4 +16,15 @@ body {
     color: #333;
 }
 
+/* index.html css */
+#text-muted-footer{
+	float:none;
+	margin: auto;
+	text-align: center;
+}
 
+/* bestpath.html css */
+#advanced-option-link{
+  float:right;
+  margin-top: -40px;
+}
