@@ -1,7 +1,7 @@
 var app = angular.module('App');
 
-app.controller('MainCtrl', ['$scope', '$routeParams', '$location', 'leafletBoundsHelpers', 'DataProvider',
-    function ($scope, $routeParams, $location, leafletBoundsHelpers,  DataProvider) {
+app.controller('MainCtrl', ['$scope', '$routeParams', '$location', 'leafletData', 'DataProvider',
+    function ($scope, $routeParams, $location, leafletData,  DataProvider) {
         var lineId = $routeParams.lineId;
         this.lines = DataProvider.getLines();
 
@@ -13,9 +13,11 @@ app.controller('MainCtrl', ['$scope', '$routeParams', '$location', 'leafletBound
 
         if (lineId) {
             this.data = DataProvider.getLineByIdAsGeoJson(lineId);
-            
-            // TODO fit the map to the shown view
-            //this.mapBounds = leafletBoundsHelpers.createBoundsFromArray(this.geojson);
+            var data = this.data;
+
+            leafletData.getMap().then(function(map) {
+                map.fitBounds(data.latlngs);
+            });
         }
 
         this.showLine = function(lineId) {

@@ -75,9 +75,15 @@ app.factory('DataProvider', ['Linee',
 
                 var features = [];
                 features.push(lineFeature);
+
+                var latlngs = [];
+                lineFeature.geometry.coordinates.forEach(function(coordinate) {
+                    latlngs.push(L.GeoJSON.coordsToLatLng(coordinate));
+                }, this);
                 return {
                     geojson: {
                         data: {
+                            // TODO type LineString with directly the points 
                             type: "FeatureCollection", features: features
                         },
                         style: {
@@ -88,7 +94,7 @@ app.factory('DataProvider', ['Linee',
                     },
                     markers: getStopsMarkers(line),
                     // TODO return also something for calculation of bounds
-                    bounds: {}
+                    latlngs: latlngs
                 }
             }
         };
