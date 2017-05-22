@@ -12,7 +12,7 @@ app.controller('MainCtrl', ['$scope', '$routeParams', '$location', 'leafletBound
         }
 
         if (lineId) {
-            this.geojson = DataProvider.getLineByIdAsGeoJson(lineId);
+            this.data = DataProvider.getLineByIdAsGeoJson(lineId);
             
             // TODO fit the map to the shown view
             //this.mapBounds = leafletBoundsHelpers.createBoundsFromArray(this.geojson);

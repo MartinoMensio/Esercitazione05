@@ -17,12 +17,29 @@ app.factory('DataProvider', ['Linee',
             }
             line.stops.forEach(function (stopId) {
                 // get coordinates
-                stop = linee.stops.find(s => s.id === stopId)
+                stop = linee.stops.find(s => s.id === stopId);
                 if (stop) {
                     result.geometry.coordinates.push([stop.latLng[1], stop.latLng[0]]);
                 }
             }, this);
             return result;
+        }
+
+        var getStopsMarkers = function (line) {
+            markers = {};
+
+            line.stops.forEach(function (stopId) {
+                var stop = linee.stops.find(s => s.id === stopId);
+
+                markers[stop.id] = {
+                    lat: stop.latLng[0],
+                    lng: stop.latLng[1],
+                    focus: false,
+                    message: stop.name
+                }
+            }, this);
+
+            return markers;
         }
 
         // console.log(linee);
@@ -55,17 +72,23 @@ app.factory('DataProvider', ['Linee',
                 }
 
                 var lineFeature = lineStringFeature(line);
+
                 var features = [];
                 features.push(lineFeature);
                 return {
-                    data: {
-                        type: "FeatureCollection", features: features
+                    geojson: {
+                        data: {
+                            type: "FeatureCollection", features: features
+                        },
+                        style: {
+                            "color": "#ff7800",
+                            "weight": 5,
+                            "opacity": 0.65
+                        }
                     },
-                    style: {
-                        "color": "#ff7800",
-                        "weight": 5,
-                        "opacity": 0.65
-                    }
+                    markers: getStopsMarkers(line),
+                    // TODO return also something for calculation of bounds
+                    bounds: {}
                 }
             }
         };
