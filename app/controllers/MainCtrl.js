@@ -14,10 +14,8 @@ app.controller('MainCtrl', ['$scope', '$routeParams', '$location', 'leafletBound
         if (lineId) {
             this.geojson = DataProvider.getLineByIdAsGeoJson(lineId);
             
-            this.mapBounds = leafletBoundsHelpers.createBoundsFromArray(this.geojson);
-        }
-        else {
-
+            // TODO fit the map to the shown view
+            //this.mapBounds = leafletBoundsHelpers.createBoundsFromArray(this.geojson);
         }
 
         this.showLine = function(lineId) {
