@@ -15,13 +15,24 @@
 					<input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input" required>
 				</div>
 				<div class="form-group">
-					<button type="submit" class="btn btn-primary" ng-click="ctrl.showBestPath()">Submit</button>
+					<button type="submit" class="btn btn-primary">Submit</button>
 				</div>
 			</form>
 			<a id="advanced-option-link" href="#">Advanced Options</a>
+			<h2> Table of the stops </h2>
+			<table class="table">
+				<thead>
+					<td>Linea</td>
+					<td>Descrizione</td>
+				</thead>
+				<tbody>
+					<!-- Here should be filled with the values of all the stops of the path selected -->
+				</tbody>
+			</table>
 		</div>
+		<button type="button" class="btn btn-primary padright" ng-click="markers.m1.icon=icon" ng-repeat="(key, icon) in icons">{{ key }}</button>
 		<div class="col-sm-6">
-			<leaflet geojson="ctrl.geojson" lf-center="ctrl.center" bounds="ctrl.bounds" height="480px"></leaflet>
+			<leaflet id="map-custom-marker"  markers="markers" center="center"  height="480px"></leaflet>
 		</div>
 	</div>
 </div>
