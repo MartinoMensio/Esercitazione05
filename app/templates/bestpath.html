@@ -32,7 +32,10 @@
 		</div>
 		<button type="button" class="btn btn-primary padright" ng-click="markers.m1.icon=icon" ng-repeat="(key, icon) in icons">{{ key }}</button>
 		<div class="col-sm-6">
-			<leaflet id="map-custom-marker"  markers="markers" center="center"  height="480px"></leaflet>
+			<leaflet id="map-custom-marker" markers="markers" center="center" event-broadcast="events" height="480px"></leaflet>
+			<h1>Markers simple example</h1>
+		    <p>Initial marker position (lat/lng): <strong ng-bind="markers.m1.lat"></strong> / <strong ng-bind="markers.m1.lng"></strong></p>
+		    </p>
 		</div>
 	</div>
 </div>
