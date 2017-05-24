@@ -62,6 +62,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         return result;
     };
 
+    // do the conversion from MinPath to geoJson
     var getResultFromMinPath = function (minPath) {
         var result = {
             // is filled later
@@ -80,6 +81,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         return result;
     }
 
+    // returns the bus stop nearest to the provided point
     var findNearestStop= function(point) {
         var minDistSq = Infinity;
         var bestStop = null;
@@ -103,7 +105,11 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
                 var srcStopId = findNearestStop(src).id;
                 var dstStopId = findNearestStop(dst).id;
                 return MongoRestClient.getMinPath(srcStopId, dstStopId).then(function(result) {
+                    // convert from MinPath to geojson
                     return getResultFromMinPath(result);
+                }, function(result) {
+                    // if it fails, provide fake data
+                    return getResultFromMinPath(FakeBestPath);
                 })
             } else {
                 // return a short-term promise only to have the same interface as when userRealMinPath is set to true
