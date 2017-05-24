@@ -24,16 +24,6 @@ function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataP
 
 	$scope.markers = new Array();
 
-	$scope.eventDetected = "No events yet...";
-	var mapEvents = leafletMapEvents.getAvailableMapEvents();
-	for (var k in mapEvents){
-		var eventName = 'leafletDirectiveMap.' + mapEvents[k];
-		$scope.$on(eventName, function(event){
-			$scope.eventDetected = event.name;
-		});
-
-	}
-
 	$scope.$on("leafletDirectiveMap.click", function(event, args){
 		if($scope.markers.length<2){
        var leafEvent = args.leafletEvent;
@@ -45,6 +35,12 @@ function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataP
        });
 	   }
    });
+
+   $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
+                console.log('hola');
+                $scope.markers[0].lat = args.model.lat;
+                $scope.markers[0].lng = args.model.lng;
+            });
 
    $scope.removeMarkers = function() {
 	   $scope.markers = new Array();

@@ -2,27 +2,33 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-6">
-			<div ng-controller="BestPathCtrl">
-				{{ welcomeMessage }}
-			</div>
 			<form>
+
 				<div class="form-group">
-					<label for="formGroupExampleInput">Source Path:</label>
-					<input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input" required>
+					<label for="formGroupExampleInput">Source Path:</label></br>
+					<label for="formGroupExampleInputA"> Latitude: </label>
+					<input ng-model="markers[0].lat" type="number" step="0.0001" class="form-control" id="formGroupExampleInputA" placeholder="Src Latitude"  required/>
+					<label for="formGroupExampleInputB"> Lon: </label>
+					<input ng-model="markers[0].lng" type="number" step="0.0001" class="form-control" id="formGroupExampleInputB" placeholder="Src Longitude"  required/>
 				</div>
+
 				<div class="form-group">
-					<label for="formGroupExampleInput2">Destination Path:</label>
-					<input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input" required>
+					<label for="formGroupExampleInput2">Destination Path:</label></br>
+					<label for="formGroupExampleInput2A"> Lat: </label>
+					<input ng-model="markers[1].lat" type="number" step="0.0001" class="form-control" id="formGroupExampleInput2A" placeholder="Dst Latitude" required>
+					<label for="formGroupExampleInput2B"> Lng: </label>
+					<input ng-model="markers[1].lng" type="number" step="0.0001" class="form-control" id="formGroupExampleInput2B" placeholder="Dst Longitude" required>
 				</div>
-				<div class="form-group">
+
+				<div class="form-group" id="button-form-group">
 					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="button" class="btn btn-primary" ng-click="removeMarkers()" >Remove</button>
 				</div>
+
 			</form>
+
 			<a id="advanced-option-link" href="#">Advanced Options</a>
-			<h1>Markers simple example</h1>
-		   	<p>Source marker position (lat/lng): <strong ng-bind="markers[0].lat"></strong> / <strong ng-bind="markers[0].lng"></strong></p>
-			<p>Destination marker position (lat/lng): <strong ng-bind="markers[1].lat"></strong> / <strong ng-bind="markers[1].lng"></strong></p>
-		</p>-->
+
 			<h2> Table of the stops </h2>
 			<table class="table">
 				<thead>
@@ -34,14 +40,8 @@
 				</tbody>
 			</table>
 		</div>
-		<button type="button" class="btn btn-primary padright" ng-click="markers.m1.icon=icon" ng-repeat="(key, icon) in icons">{{ key }}</button>
-		<button type="button" class="btn btn-primary padright" ng-click="removeMarkers()" >Remove</button>
 		<div class="col-sm-6">
-				<ul>
-	        <li><strong ng-bind="eventDetected"></strong> event caught in listener.</li>
-	    </ul>
-			<leaflet markers="markers" center="center" event-broadcast="events" height="480px"></leaflet>
-
+			<leaflet markers="markers" center="center" event-broadcast="events" height="480px"></leaflet>	
 		</div>
 	</div>
 </div>

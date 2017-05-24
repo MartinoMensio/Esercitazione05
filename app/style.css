@@ -28,3 +28,20 @@ body {
   float:right;
   margin-top: -40px;
 }
+
+.form-control{
+}
+
+.label-input input{
+}
+
+.label{
+}
+
+#button-form-group {
+	margin-top: 40px;
+}
+
+.form-inline{
+	margin: auto;
+}
