@@ -20,8 +20,8 @@
 			</form>
 			<a id="advanced-option-link" href="#">Advanced Options</a>
 			<h1>Markers simple example</h1>
-		   	<p>Source marker position (lat/lng): <strong ng-bind="markers.src.lat"></strong> / <strong ng-bind="markers.src.lng"></strong></p>
-			<p>Destination marker position (lat/lng): <strong ng-bind="markers.dst.lat"></strong> / <strong ng-bind="markers.dst.lng"></strong></p>
+		   	<p>Source marker position (lat/lng): <strong ng-bind="markers[0].lat"></strong> / <strong ng-bind="markers[0].lng"></strong></p>
+			<p>Destination marker position (lat/lng): <strong ng-bind="markers[1].lat"></strong> / <strong ng-bind="markers[1].lng"></strong></p>
 		</p>-->
 			<h2> Table of the stops </h2>
 			<table class="table">
@@ -35,6 +35,7 @@
 			</table>
 		</div>
 		<button type="button" class="btn btn-primary padright" ng-click="markers.m1.icon=icon" ng-repeat="(key, icon) in icons">{{ key }}</button>
+		<button type="button" class="btn btn-primary padright" ng-click="removeMarkers()" >Remove</button>
 		<div class="col-sm-6">
 				<ul>
 	        <li><strong ng-bind="eventDetected"></strong> event caught in listener.</li>

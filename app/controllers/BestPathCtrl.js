@@ -22,6 +22,7 @@ function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataP
 		}
 	});
 
+	$scope.markers = new Array();
 
 	$scope.eventDetected = "No events yet...";
 	var mapEvents = leafletMapEvents.getAvailableMapEvents();
@@ -34,32 +35,19 @@ function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataP
 	}
 
 	$scope.$on("leafletDirectiveMap.click", function(event, args){
-		var leafEvent = args.leafletEvent;
-		$scope.addSoruceMarker(leafEvent);
-	});
+		if($scope.markers.length<2){
+       var leafEvent = args.leafletEvent;
+       $scope.markers.push({
+           lat: leafEvent.latlng.lat,
+           lng: leafEvent.latlng.lng,
+           message: "Point " +($scope.markers.length+1),
+		   draggable: true
+       });
+	   }
+   });
 
-	$scope.addSoruceMarker = function(leafEvent) {
-		angular.extend($scope, {
-			markers: {
-				src: {
-					lat: leafEvent.latlng.lat,
-					lng: leafEvent.latlng.lng,
-					message: "I'm a static marker",
-				},
-			}
-		});
-	};
-
-	$scope.addDestinationMarker = function() {
-		angular.extend($scope, {
-			markers: {
-				dst: {
-					lat: 51.505,
-					lng: -0.09,
-					message: "I'm a static marker",
-				},
-			}
-		});
-	};
+   $scope.removeMarkers = function() {
+	   $scope.markers = new Array();
+   }
 
 } ]);
