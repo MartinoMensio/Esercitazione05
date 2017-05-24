@@ -20,9 +20,9 @@
 			</form>
 			<a id="advanced-option-link" href="#">Advanced Options</a>
 			<h1>Markers simple example</h1>
-		    <p>Source marker position (lat/lng): <strong ng-bind="markers.src.lat"></strong> / <strong ng-bind="markers.src.lng"></strong></p>
+		   <!-- <p>Source marker position (lat/lng): <strong ng-bind="markers.src.lat"></strong> / <strong ng-bind="markers.src.lng"></strong></p>
 			<p>Destination marker position (lat/lng): <strong ng-bind="markers.dst.lat"></strong> / <strong ng-bind="markers.dst.lng"></strong></p>
-		    </p>
+		</p>-->
 			<h2> Table of the stops </h2>
 			<table class="table">
 				<thead>
@@ -36,7 +36,10 @@
 		</div>
 		<button type="button" class="btn btn-primary padright" ng-click="markers.m1.icon=icon" ng-repeat="(key, icon) in icons">{{ key }}</button>
 		<div class="col-sm-6">
-			<leaflet id="map-custom-marker" markers="markers" center="center" event-broadcast="events" height="480px"></leaflet>
+				<ul>
+	        <li><strong ng-bind="eventDetected"></strong> event caught in listener.</li>
+	    </ul>
+			<leaflet markers="markers" center="center" event-broadcast="events" height="480px"></leaflet>
 
 		</div>
 	</div>

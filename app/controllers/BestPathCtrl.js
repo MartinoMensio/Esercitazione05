@@ -1,19 +1,19 @@
 var app = angular.module('App');
 
-app.controller('BestPathCtrl', ['$scope', '$routeParams', '$location', 'leafletData', 'DataProvider',
-function ($scope, $routeParams, $location, leafletData,  DataProvider) {
+app.controller('BestPathCtrl', ['$scope', "leafletMapEvents",'$routeParams', '$location', 'leafletData', 'DataProvider',
+function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataProvider) {
 
-	angular.extend($scope, {
+	angular.extend($scope,leafletMapEvents, {
 		center: {
 			lat: 45.064,
 			lng: 7.681,
 			zoom: 13
 		},
 		defaults: {
-            scrollWheelZoom: false
-        },
+			scrollWheelZoom: false
+		},
 		markers: {
-			src: {
+			/*src: {
 				lat: 45.064,
 				lng: 7.685,
 				focus: true,
@@ -23,42 +23,46 @@ function ($scope, $routeParams, $location, leafletData,  DataProvider) {
 			dst: {
 				lat: 45.064,
 				lng: 7.681,
-				focus: true,
+				focus: false,
 				message: "I'm the path destination",
 				draggable : true
-			}
+			}*/
 		},
 		events: {
-			/*map: {
-				enable: ['click', 'drag', 'blur', 'touchstart'],
+			map: {
+				enable: ['zoomstart', 'drag', 'click', 'mousemove'],
 				logic: 'emit'
-			}*/
+			}
 		}
-
-
 	});
-	/*
-	$scope.markers = new Array();
+
+
+	$scope.eventDetected = "No events yet...";
+	var mapEvents = leafletMapEvents.getAvailableMapEvents();
+	for (var k in mapEvents){
+		var eventName = 'leafletDirectiveMap.' + mapEvents[k];
+		$scope.$on(eventName, function(event){
+			$scope.eventDetected = event.name;
+		});
+	}
+
+	$scope.addMarkers = function() {
+			 angular.extend($scope, {
+				 markers: {
+					 m1: {
+						 lat: 45.068,
+						 lng: 7.681,
+						 message: "I'm a static marker",
+						 draggable: true
+					 }
+				 }
+			 });
+		 };
 
 	$scope.$on("leafletDirectiveMap.click", function(event, args){
 		var leafEvent = args.leafletEvent;
 
-			   $scope.markers.push({
-							 lat: leafEvent.latlng.lat,
-							 lng: leafEvent.latlng.lng,
-							 message: "My Added Marker"
-				});
-
+		$scope.addMarkers();
 	});
-
-/*	$scope.$on("leafletDirectiveMarker.dragend", function(event, args){
-			   $scope.position.lat = args.model.lat;
-			   $scope.position.lng = args.model.lng;
-
-
-		   });*/
-
-
-
 
 } ]);
