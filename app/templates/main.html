@@ -2,13 +2,20 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-6">
+			<div class="input-group">
+				<input ng-model="searchStatement" type="text" class="form-control" placeholder="Search a line...">
+				<span class="input-group-btn">
+					<button class="btn btn-secondary" type="button">Show all</button>
+				</span>
+			</div>
+
 			<table class="table">
 				<thead>
 					<td>Linea</td>
 					<td>Descrizione</td>
 				</thead>
 				<tbody>
-					<tr ng-repeat="line in ctrl.lines" ng-click="ctrl.showLine(line.line)">
+					<tr ng-repeat="line in ctrl.lines | filter : {line: searchStatement}" ng-click="ctrl.showLine(line.line)">
 						<td>{{line.line}}</td>
 						<td>{{line.desc}}</td>
 					</tr>
