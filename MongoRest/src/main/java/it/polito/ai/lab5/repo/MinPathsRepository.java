@@ -6,10 +6,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import it.polito.ai.lab5.entities.Key;
 import it.polito.ai.lab5.entities.MinPath;
 
+@CrossOrigin(origins = "*")
 @RepositoryRestResource(collectionResourceRel = "min_paths", path = "min_paths")
 public interface MinPathsRepository extends MongoRepository<MinPath, Key> {
 	/**
