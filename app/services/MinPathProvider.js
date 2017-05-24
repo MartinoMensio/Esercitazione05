@@ -1,6 +1,6 @@
 var app = angular.module('App');
 
-app.factory('MinPathProvider', ['FakeBestPath', 'Linee', function (FakeBestPath, linee) {
+app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q', '$timeout', function (FakeBestPath, linee, MongoRestClient, $q, $timeout) {
 
     // returns the geojson for an edge
     var getEdgeFeature = function (edge) {
@@ -62,27 +62,60 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', function (FakeBestPath,
         return result;
     };
 
+    var getResultFromMinPath = function (minPath) {
+        var result = {
+            // is filled later
+            geojson: {},
+            markers: {}
+        }
+        minPath.edges.forEach(function (edge) {
+            var edgeFeature = getEdgeFeature(edge);
+            // nested geojson for the edge
+            result.geojson[edge.idSource + '_' + edge.idDestination] = edgeFeature;
+            // get a marker for the source of the edge
+            var edgeSourceMarker = getEdgeSourceMarker(edge);
+            result.markers[edge.idSource] = edgeSourceMarker;
+        }, this);
+
+        return result;
+    }
+
+    var findNearestStop= function(point) {
+        var minDistSq = Infinity;
+        var bestStop = null;
+        linee.stops.forEach(function(stop) {
+            var distSq = Math.pow(point[0]-stop.latLng[0], 2) + Math.pow(point[1]-stop.latLng[1], 2);
+            if (distSq < minDistSq) {
+                bestStop = stop;
+                minDistSq = distSq;
+            }
+        }, this);
+        return bestStop;
+    }
+
     return {
         // src and dst are arrays with lat&lng inside
-        getMinPathBetween: function (src, dst) {
+        // useRealMinPath true means that a connection to MongoRest will be done to get a MinPath
+        getMinPathBetween: function (src, dst, useRealMinPath = false) {
             // TODO get a real best path using src and dst
-            var path = FakeBestPath;
-
-            var result = {
-                // is filled later
-                geojson: {},
-                markers: {}
+            var path = null;
+            if (useRealMinPath) {
+                var srcStopId = findNearestStop(src).id;
+                var dstStopId = findNearestStop(dst).id;
+                return MongoRestClient.getMinPath(srcStopId, dstStopId).then(function(result) {
+                    return getResultFromMinPath(result);
+                })
+            } else {
+                // return a short-term promise only to have the same interface as when userRealMinPath is set to true
+                path = FakeBestPath;
+                var deferred = $q.defer();
+                $timeout(function() {
+                    deferred.resolve(getResultFromMinPath(path));
+                }, 0);
+                return deferred.promise;
             }
-            path.edges.forEach(function (edge) {
-                var edgeFeature = getEdgeFeature(edge);
-                // nested geojson for the edge
-                result.geojson[edge.idSource + '_' + edge.idDestination] = edgeFeature;
-                // get a marker for the source of the edge
-                var edgeSourceMarker = getEdgeSourceMarker(edge);
-                result.markers[edge.idSource] = edgeSourceMarker;
-            }, this);
 
-            return result;
+
         }
     }
 }]);
