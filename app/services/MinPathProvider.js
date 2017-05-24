@@ -2,32 +2,21 @@ var app = angular.module('App');
 
 app.factory('MinPathProvider', ['FakeBestPath', 'Linee', function (FakeBestPath, linee) {
 
-    // builds the array of features (each one represents an edge)
-    var getEdgeFeatures = function (edges) {
-        var result = [];
-        edges.forEach(function (edge) {
-            var edgeFeature = getEdgeFeature(edge);
-            result.push(edgeFeature);
-        }, this);
-        return result;
-    }
-
     // returns the geojson for an edge
     var getEdgeFeature = function (edge) {
         result = {
-            type: "Feature",
-            properties: {
-                name: "line",
-                mode: edge.mode,
-                lineId: edge.lineId,
-                cost: edge.cost
-            },
-            geometry: {
+            data: {
                 type: "LineString",
-                coordinates: []
+                coordinates: [],
+                properties: {
+                    name: "line",
+                    mode: edge.mode,
+                    lineId: edge.lineId,
+                    cost: edge.cost
+                }
             },
             style: {
-                color: "#ffc800",
+                color: "#" + ((1 << 24) * Math.random() | 0).toString(16),
                 weight: 5,
                 opacity: 0.65
             }
@@ -37,12 +26,12 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', function (FakeBestPath,
             var srcStop = linee.stops.find(s => s.id === edge.idSource);
             if (srcStop) {
                 // add the stop coordinates to the array
-                result.geometry.coordinates.push([srcStop.latLng[1], srcStop.latLng[0]]);
+                result.data.coordinates.push([srcStop.latLng[1], srcStop.latLng[0]]);
             }
             var dstStop = linee.stops.find(s => s.id === edge.idDestination);
             if (dstStop) {
                 // add the stop coordinates to the array
-                result.geometry.coordinates.push([dstStop.latLng[1], dstStop.latLng[0]]);
+                result.data.coordinates.push([dstStop.latLng[1], dstStop.latLng[0]]);
             }
         } else {
             // this is a bus edge
@@ -50,12 +39,28 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', function (FakeBestPath,
                 var stop = linee.stops.find(s => s.id === stopId);
                 if (stop) {
                     // add the stop coordinates to the array
-                    result.geometry.coordinates.push([stop.latLng[1], stop.latLng[0]]);
+                    result.data.coordinates.push([stop.latLng[1], stop.latLng[0]]);
                 }
             }, this);
         }
         return result;
     }
+
+    var getEdgeSourceMarker = function (edge) {
+        var srcStop = linee.stops.find(s => s.id === edge.idSource);
+        var result = {
+            lat: srcStop.latLng[0],
+            lng: srcStop.latLng[1],
+            focus: false,
+            message: '<h3>' + srcStop.id + ' - ' + srcStop.name + '</h3>'
+        }
+        if (edge.mode) {
+            result.message += 'procedere a piedi';
+        } else {
+            result.message += 'prendere linea ' + edge.lineId;
+        }
+        return result;
+    };
 
     return {
         // src and dst are arrays with lat&lng inside
@@ -63,19 +68,21 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', function (FakeBestPath,
             // TODO get a real best path using src and dst
             var path = FakeBestPath;
 
-            var edgeFeatures = getEdgeFeatures(path.edges);
-
-            return {
-                geojson: {
-                    data: {
-                        type: "FeatureCollection",
-                        features: edgeFeatures
-                    }
-                },
-                markers: {
-
-                }
+            var result = {
+                // is filled later
+                geojson: {},
+                markers: {}
             }
+            path.edges.forEach(function (edge) {
+                var edgeFeature = getEdgeFeature(edge);
+                // nested geojson for the edge
+                result.geojson[edge.idSource + '_' + edge.idDestination] = edgeFeature;
+                // get a marker for the source of the edge
+                var edgeSourceMarker = getEdgeSourceMarker(edge);
+                result.markers[edge.idSource] = edgeSourceMarker;
+            }, this);
+
+            return result;
         }
     }
 }]);
