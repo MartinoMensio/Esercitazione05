@@ -13,20 +13,6 @@ function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataP
 			scrollWheelZoom: false
 		},
 		markers: {
-			/*src: {
-				lat: 45.064,
-				lng: 7.685,
-				focus: true,
-				message: "I'm the path source",
-				draggable : true
-			},
-			dst: {
-				lat: 45.064,
-				lng: 7.681,
-				focus: false,
-				message: "I'm the path destination",
-				draggable : true
-			}*/
 		},
 		events: {
 			map: {
@@ -44,25 +30,36 @@ function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataP
 		$scope.$on(eventName, function(event){
 			$scope.eventDetected = event.name;
 		});
-	}
 
-	$scope.addMarkers = function() {
-			 angular.extend($scope, {
-				 markers: {
-					 m1: {
-						 lat: 45.068,
-						 lng: 7.681,
-						 message: "I'm a static marker",
-						 draggable: true
-					 }
-				 }
-			 });
-		 };
+	}
 
 	$scope.$on("leafletDirectiveMap.click", function(event, args){
 		var leafEvent = args.leafletEvent;
-
-		$scope.addMarkers();
+		$scope.addSoruceMarker(leafEvent);
 	});
+
+	$scope.addSoruceMarker = function(leafEvent) {
+		angular.extend($scope, {
+			markers: {
+				src: {
+					lat: leafEvent.latlng.lat,
+					lng: leafEvent.latlng.lng,
+					message: "I'm a static marker",
+				},
+			}
+		});
+	};
+
+	$scope.addDestinationMarker = function() {
+		angular.extend($scope, {
+			markers: {
+				dst: {
+					lat: 51.505,
+					lng: -0.09,
+					message: "I'm a static marker",
+				},
+			}
+		});
+	};
 
 } ]);
