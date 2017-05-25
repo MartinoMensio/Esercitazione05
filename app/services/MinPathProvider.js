@@ -2,6 +2,19 @@ var app = angular.module('App');
 
 app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q', '$timeout', function (FakeBestPath, linee, MongoRestClient, $q, $timeout) {
 
+    // returns a RGB color with luminance not greater than 50% and saturation 100% 
+    var getRandomColor = function () {
+        var rgb_out = Math.floor(2.9999 * Math.random());
+        var result = '#';
+        for (var index = 0; index < 3; index++) {
+            var r_256 = ((1 << 8) * Math.random() | 0).toString(16);
+            var padded = '00'.substring(r_256.length) + r_256;  
+            result += (index != rgb_out) ? padded : '00';
+        }
+        console.log(result);
+        return result;
+    }
+
     // returns the geojson for an edge
     var getEdgeFeature = function (edge) {
         result = {
@@ -16,9 +29,9 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
                 }
             },
             style: {
-                color: "#" + ((1 << 24) * Math.random() | 0).toString(16),
+                color: getRandomColor(),
                 weight: 5,
-                opacity: 0.65
+                opacity: 1
             }
         }
         if (edge.mode) {
@@ -62,13 +75,55 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         return result;
     };
 
+    var createEdge = function (src, dst) {
+        return {
+            data: {
+                type: "LineString",
+                coordinates: [[src[1], src[0]], [dst[1], dst[0]]],
+                properties: {
+                    name: "line",
+                }
+            },
+            style: {
+                color: getRandomColor(),
+                weight: 5,
+                opacity: 1
+            }
+        };
+    }
+
+    var createMarker = function (point, msg) {
+        return {
+            lat: point[0],
+            lng: point[1],
+            focus: false,
+            message: msg
+        };
+    }
+
     // do the conversion from MinPath to geoJson
-    var getResultFromMinPath = function (minPath) {
+    var getResultFromMinPath = function (minPath, src, dst) {
         var result = {
             // is filled later
             geojson: {},
             markers: {}
         }
+        /*
+               // add a walking edge at the beginning from the clicked point
+               minPath.edges.unshift({
+                   idSource: "SRC",
+                   idDestination: minPath.edges[0].idSource,
+                   mode: true,
+                   lineId: null,
+               });
+               // and a walking edge at the end of the found path to the second clicked point
+               minPath.edges.push({
+                   idSource: minPath.edges[minPath.edges.length -1].idSource,
+                   idDestination: "DST",
+                   mode: true,
+                   lineId: null
+               });
+       */
         minPath.edges.forEach(function (edge) {
             var edgeFeature = getEdgeFeature(edge);
             // nested geojson for the edge
@@ -77,16 +132,23 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
             var edgeSourceMarker = getEdgeSourceMarker(edge);
             result.markers[edge.idSource] = edgeSourceMarker;
         }, this);
+        var firstStop = linee.stops.find(s => s.id === minPath.edges[0].idSource);
+        var lastStop = linee.stops.find(s => s.id === minPath.edges[minPath.edges.length - 1].idDestination);
+        result.geojson['first'] = createEdge([src.lat, src.lng], firstStop.latLng);
+        result.geojson['last'] = createEdge(lastStop.latLng, [dst.lat, dst.lng]);
+        result.markers['first'] = createMarker([src.lat, src.lng], 'Partire a piedi');
+        result.markers['penultimate'] = createMarker(lastStop.latLng, '<h3>' + lastStop.id + ' - ' + lastStop.name + '</h3>procedere a piedi');
+        result.markers['last'] = createMarker([dst.lat, dst.lng], 'destinazione raggiunta');
 
         return result;
     }
 
     // returns the bus stop nearest to the provided point
-    var findNearestStop= function(point) {
+    var findNearestStop = function (point) {
         var minDistSq = Infinity;
         var bestStop = null;
-        linee.stops.forEach(function(stop) {
-            var distSq = Math.pow(point.lat-stop.latLng[0], 2) + Math.pow(point.lng-stop.latLng[1], 2);
+        linee.stops.forEach(function (stop) {
+            var distSq = Math.pow(point.lat - stop.latLng[0], 2) + Math.pow(point.lng - stop.latLng[1], 2);
             if (distSq < minDistSq) {
                 bestStop = stop;
                 minDistSq = distSq;
@@ -104,19 +166,19 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
             if (useRealMinPath) {
                 var srcStopId = findNearestStop(src).id;
                 var dstStopId = findNearestStop(dst).id;
-                return MongoRestClient.getMinPath(srcStopId, dstStopId).then(function(result) {
+                return MongoRestClient.getMinPath(srcStopId, dstStopId).then(function (result) {
                     // convert from MinPath to geojson
-                    return getResultFromMinPath(result);
-                }, function(result) {
+                    return getResultFromMinPath(result, src, dst);
+                }, function (result) {
                     // if it fails, provide fake data
-                    return getResultFromMinPath(FakeBestPath);
+                    return getResultFromMinPath(FakeBestPath, src, dst);
                 })
             } else {
                 // return a short-term promise only to have the same interface as when userRealMinPath is set to true
                 path = FakeBestPath;
                 var deferred = $q.defer();
-                $timeout(function() {
-                    deferred.resolve(getResultFromMinPath(path));
+                $timeout(function () {
+                    deferred.resolve(getResultFromMinPath(path, src, dst));
                 }, 0);
                 return deferred.promise;
             }
