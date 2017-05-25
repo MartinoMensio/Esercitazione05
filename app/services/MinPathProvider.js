@@ -86,7 +86,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         var minDistSq = Infinity;
         var bestStop = null;
         linee.stops.forEach(function(stop) {
-            var distSq = Math.pow(point[0]-stop.latLng[0], 2) + Math.pow(point[1]-stop.latLng[1], 2);
+            var distSq = Math.pow(point.lat-stop.latLng[0], 2) + Math.pow(point.lng-stop.latLng[1], 2);
             if (distSq < minDistSq) {
                 bestStop = stop;
                 minDistSq = distSq;
@@ -96,7 +96,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
     }
 
     return {
-        // src and dst are arrays with lat&lng inside
+        // src and dst are objects {lat,lng}
         // useRealMinPath true means that a connection to MongoRest will be done to get a MinPath
         getMinPathBetween: function (src, dst, useRealMinPath = false) {
             // TODO get a real best path using src and dst
