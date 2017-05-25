@@ -1,7 +1,7 @@
 var app = angular.module('App');
 
-app.controller('BestPathCtrl', ['$scope', "leafletMapEvents",'$routeParams', '$location', 'leafletData', 'DataProvider',
-function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataProvider) {
+app.controller('BestPathCtrl', ['$scope', "leafletMapEvents",'$routeParams', '$location', 'leafletData', 'DataProvider', 'MinPathProvider',
+function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataProvider, MinPathProvider) {
 
 	angular.extend($scope,leafletMapEvents, {
 		center: {
@@ -44,6 +44,13 @@ function ($scope, leafletMapEvents, $routeParams, $location, leafletData,  DataP
 
    $scope.removeMarkers = function() {
 	   $scope.markers = new Array();
+   }
+
+   $scope.findPath = function() {
+	MinPathProvider.getMinPathBetween($scope.markers[0], $scope.markers[1], true).then(function(result) {
+		$scope.geojson = result.geojson;
+		$scope.markers = result.markers;
+	})
    }
 
 } ]);
