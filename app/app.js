@@ -1,46 +1,31 @@
 var app = angular.module('App', ['ngRoute', 'ngResource', 'ui-leaflet', 'ui.router'])
 
-app.config(function ($routeProvider, $locationProvider, $stateProvider, $urlRouterProvider) {
-    /*$routeProvider
-        .when('/', {
-            templateUrl: 'templates/busLinesList.html',
-            controller: 'TestCtrl',
-            controllerAs: 'ctrl'
-        })
-        .when('/bestpath', {
-            templateUrl: 'templates/bestpath.html',
-            controller: 'BestPathCtrl',
-            controllerAs: 'ctrl' /* *** Opportuno cambiare nome ? Rispondete qui a fianco... *** */
-        /*})
-        .when('/:lineId', {
-            templateUrl: 'templates/main.html',
-            controller: 'MainCtrl',
-            controllerAs: 'ctrl'
-        })
-        .otherwise({ redirectTo: "/" });*/
-
+app.config(function ($locationProvider, $urlRouterProvider, $stateProvider) {
+    // If the URL does not correspond to anything then redirect to '/'
     $urlRouterProvider.otherwise('/');
 
     // States defintion
     $stateProvider
-
+        // Home page state
         .state('home', {
             url: '/',
             templateUrl: 'templates/home.html',
         })
+        // Bus lines list page
         .state('busLines', {
             url: '/busLines',
             templateUrl: 'templates/busLinesList.html',
-            controller: 'TestCtrl',
+            controller: 'MainCtrl',
             controllerAs: 'ctrl'
         })
+        // Bus lines list page + map visualization
         .state('busLines.line', {
             url: '/{lineId}',
             templateUrl: 'templates/busLineMap.html',
-            controller: 'TestCtrl',
+            controller: 'MainCtrl',
             controllerAs: 'ctrl'
         })
-
+        // Best path page
         .state('bestPath', {
             url: '/bestPath',
             templateUrl: 'templates/bestpath.html',
