@@ -2,13 +2,13 @@ var app = angular.module('App');
 
 app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q', '$timeout', function (FakeBestPath, linee, MongoRestClient, $q, $timeout) {
 
-    // returns a RGB color with luminance not greater than 50% and saturation 100% 
+    // returns a RGB color with luminance not greater than 50% and saturation 100%
     var getRandomColor = function () {
         var rgb_out = Math.floor(2.9999 * Math.random());
         var result = '#';
         for (var index = 0; index < 3; index++) {
             var r_256 = ((1 << 8) * Math.random() | 0).toString(16);
-            var padded = '00'.substring(r_256.length) + r_256;  
+            var padded = '00'.substring(r_256.length) + r_256;
             result += (index != rgb_out) ? padded : '00';
         }
         console.log(result);
@@ -139,7 +139,6 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         result.markers['first'] = createMarker([src.lat, src.lng], 'Partire a piedi');
         result.markers['penultimate'] = createMarker(lastStop.latLng, '<h3>' + lastStop.id + ' - ' + lastStop.name + '</h3>procedere a piedi');
         result.markers['last'] = createMarker([dst.lat, dst.lng], 'destinazione raggiunta');
-
         return result;
     }
 
