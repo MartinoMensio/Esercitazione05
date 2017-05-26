@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="lib/leaflet.css" />
 	<link rel="stylesheet" href="style.css" />
 	<base href="/" />
+
 	<!--
 	<script type="text/javascript">
 	angular.element(document.getElementsByTagName('head')).append(angular.element('<base href="' + window.location.pathname + '" />'));
@@ -23,8 +24,9 @@
 				<span class="navbar-brand" href="#">AngularJS</span>
 			</div>
 			<ul class="nav navbar-nav">
-				<li> <a href="#!/">Home</a> </li>
-				<li> <a href="#!/bestpath">Best Path</a> </li>
+				<li> <a ui-sref="home">Home</a> </li>
+				<li> <a ui-sref="busLines">Bus lines</a> </li>
+				<li> <a ui-sref="bestPath">Best Path</a> </li>
 			</ul>
 		</div>
 		<!-- /.container -->
@@ -32,7 +34,7 @@
 
 	<!-- Page Content -->
 	<div class="container">
-		<div ng-view></div>
+		<div ui-view></div>
 	</div>
 	<!-- /.container -->
 
@@ -59,6 +61,7 @@
 	<script src="lib/leaflet.js"></script>
 	<script src="lib/ui-leaflet.js"></script>
 	<script src="lib/ui-bootstrap-tpls-2.5.0.js"></script>
+	<script src="//unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>
 	<script src="app.js"></script>
 	<!-- services -->
 	<script src="services/DataProvider.js"></script>
@@ -66,6 +69,8 @@
 	<script src="services/MongoRestClient.js"></script>
 	<!-- controllers -->
 	<script src="controllers/MainCtrl.js"></script>
+	<script src="controllers/TestCtrl.js"></script>
+	<script src="controllers/BusListCtrl.js"></script>
 	<script src="controllers/BestPathCtrl.js"></script>
 	<!-- constants -->
 	<script src="data/linee.js"></script>
