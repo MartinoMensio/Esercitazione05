@@ -37,6 +37,13 @@
 				</thead>
 				<tbody>
 					<!-- Here should be filled with the values of all the stops of the path selected -->
+					<tbody>
+						<!-- TODO sort (should change the service to provide result logically sortable) -->
+						<tr ng-repeat="edge in geojson">
+							<td>{{edge.data.properties.lineId ? edge.data.properties.lineId : 'a piedi'}}</td>
+							<td>{{edge.data.properties}}</td>
+						</tr>
+					</tbody>
 				</tbody>
 			</table>
 		</div>

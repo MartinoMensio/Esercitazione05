@@ -3,7 +3,8 @@ var app = angular.module('App');
 app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q', '$timeout', function (FakeBestPath, linee, MongoRestClient, $q, $timeout) {
 
     // returns a RGB color with luminance not greater than 50% and saturation 100%
-    var getRandomColor = function () {
+    var getRandomColor = function (mode) {
+        // TODO consider mode to provide color consistent with the map legend
         var rgb_out = Math.floor(2.9999 * Math.random());
         var result = '#';
         for (var index = 0; index < 3; index++) {
@@ -25,11 +26,12 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
                     name: "line",
                     mode: edge.mode,
                     lineId: edge.lineId,
-                    cost: edge.cost
+                    srcId: edge.idSource,
+                    dstId: edge.idDestination
                 }
             },
             style: {
-                color: getRandomColor(),
+                color: getRandomColor(edge.mode),
                 weight: 5,
                 opacity: 1
             }
@@ -82,10 +84,14 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
                 coordinates: [[src[1], src[0]], [dst[1], dst[0]]],
                 properties: {
                     name: "line",
+                    mode: true,
+                    lineId: null,
+                    srcId: null, // TODO the first and last edge also have info on stop
+                    dstId: null
                 }
             },
             style: {
-                color: getRandomColor(),
+                color: getRandomColor(true),
                 weight: 5,
                 opacity: 1
             }
