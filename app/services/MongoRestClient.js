@@ -11,6 +11,7 @@ app.factory('MongoRestClient', ['$http', '$q', function ($http, $q) {
             $http.get(host + ':' + port + '/min_paths/' + srcId + '_' + dstId).then(function (result) {
                 deferred.resolve(result.data);
             }, function (result) {
+                // TODO handle 404 case (when wrong stopId or same src and dst)
                 deferred.reject(result);
             });
             return deferred.promise;

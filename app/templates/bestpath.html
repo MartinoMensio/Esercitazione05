@@ -7,17 +7,17 @@
 				<div class="form-group">
 					<label for="formGroupExampleInput">Source Path:</label></br>
 					<label for="formGroupExampleInputA"> Latitude: </label>
-					<input ng-model="markers[0].lat" type="number" class="form-control" id="formGroupExampleInputA" placeholder="Src Latitude"  required/>
+					<input ng-model="markers['source'].lat" type="number" class="form-control" id="formGroupExampleInputA" placeholder="Src Latitude"  required/>
 					<label for="formGroupExampleInputB"> Lon: </label>
-					<input ng-model="markers[0].lng" type="number"  class="form-control" id="formGroupExampleInputB" placeholder="Src Longitude"  required/>
+					<input ng-model="markers['source'].lng" type="number"  class="form-control" id="formGroupExampleInputB" placeholder="Src Longitude"  required/>
 				</div>
 
 				<div class="form-group">
 					<label for="formGroupExampleInput2">Destination Path:</label></br>
 					<label for="formGroupExampleInput2A"> Lat: </label>
-					<input ng-model="markers[1].lat" type="number" class="form-control" id="formGroupExampleInput2A" placeholder="Dst Latitude" required>
+					<input ng-model="markers['destination'].lat" type="number" class="form-control" id="formGroupExampleInput2A" placeholder="Dst Latitude" required>
 					<label for="formGroupExampleInput2B"> Lng: </label>
-					<input ng-model="markers[1].lng" type="number" class="form-control" id="formGroupExampleInput2B" placeholder="Dst Longitude" required>
+					<input ng-model="markers['destination'].lng" type="number" class="form-control" id="formGroupExampleInput2B" placeholder="Dst Longitude" required>
 				</div>
 
 				<div class="form-group" id="button-form-group">

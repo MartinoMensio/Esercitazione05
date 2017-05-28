@@ -136,9 +136,9 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         var lastStop = linee.stops.find(s => s.id === minPath.edges[minPath.edges.length - 1].idDestination);
         result.geojson['first'] = createEdge([src.lat, src.lng], firstStop.latLng);
         result.geojson['last'] = createEdge(lastStop.latLng, [dst.lat, dst.lng]);
-        result.markers['first'] = createMarker([src.lat, src.lng], 'Partire a piedi');
+        result.markers['source'] = createMarker([src.lat, src.lng], 'Partire a piedi');
         result.markers['penultimate'] = createMarker(lastStop.latLng, '<h3>' + lastStop.id + ' - ' + lastStop.name + '</h3>procedere a piedi');
-        result.markers['last'] = createMarker([dst.lat, dst.lng], 'destinazione raggiunta');
+        result.markers['destination'] = createMarker([dst.lat, dst.lng], 'destinazione raggiunta');
         return result;
     }
 
