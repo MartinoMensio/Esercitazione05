@@ -47,6 +47,11 @@ app.factory('DataProvider', ['Linee',
                 return linee.lines;
             },
 
+            // function to get all the stops
+            getStops: function() {
+                return linee.stops;
+            },
+
             // function to get the line details
             getLineByIdAsGeoJson: function (lineId) {
                 line = linee.lines.find(l => l.line === lineId);
