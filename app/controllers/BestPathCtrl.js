@@ -1,7 +1,7 @@
 var app = angular.module('App');
 
-app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$location', 'leafletData', 'DataProvider', 'MinPathProvider',
-    function ($scope, leafletMapEvents, $routeParams, $location, leafletData, DataProvider, MinPathProvider) {
+app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$location', 'leafletData', 'DataProvider', 'MinPathProvider', 'GeocodingService',
+    function ($scope, leafletMapEvents, $routeParams, $location, leafletData, DataProvider, MinPathProvider, GeocodingService) {
 
         angular.extend($scope, leafletMapEvents, {
             center: {
@@ -37,6 +37,7 @@ app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$
                     message: key,
                     draggable: true
                 };
+                $scope[key + 'Str'] = 'set on map';
             }
         });
 
@@ -61,6 +62,18 @@ app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$
                     $scope.markers = result.markers;
                 });
             }
+        }
+
+        $scope.geocodeSrc = function() {
+            GeocodingService.getLocationFromString($scope.sourceStr).then(function(result) {
+                $scope.markers['source'] = result.geometry.location;
+            })
+        }
+
+        $scope.geocodeDst = function() {
+            GeocodingService.getLocationFromString($scope.destinationStr).then(function(result) {
+                $scope.markers['destination'] = result.geometry.location;
+            })
         }
     }
 ]);

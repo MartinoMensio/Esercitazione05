@@ -2,8 +2,15 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-6">
+			<h3>Click on the map two locations or search in the boxes</h3>
 			<form>
-
+				<div class="form-group">
+					<label for="sourceStr">Source</label>
+					<input ng-model="sourceStr" ng-model-options="{ debounce: 1000 }" ng-change="geocodeSrc()" class="form-control" id="sourceStr" placeholder="from where?" />
+					<label for="destinationStr">Destination</label>
+					<input ng-model="destinationStr" ng-model-options="{ debounce: 1000 }" ng-change="geocodeDst()" class="form-control" id="destinationStr" placeholder="to where?" />
+				</div>
+<!--
 				<div class="form-group">
 					<label for="formGroupExampleInput">Source Path:</label></br>
 					<label for="formGroupExampleInputA"> Latitude: </label>
@@ -19,7 +26,7 @@
 					<label for="formGroupExampleInput2B"> Lng: </label>
 					<input ng-model="markers['destination'].lng" type="number" class="form-control" id="formGroupExampleInput2B" placeholder="Dst Longitude" required>
 				</div>
-
+-->
 				<div class="form-group" id="button-form-group">
 					<button type="submit" class="btn btn-primary" ng-click="findPath()">Submit</button>
 					<button type="button" class="btn btn-primary" ng-click="removeMarkers()" >Remove</button>
