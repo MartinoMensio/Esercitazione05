@@ -1,6 +1,6 @@
 var app = angular.module('App', ['ngRoute', 'ngResource', 'ui-leaflet', 'ui.router'])
 
-app.config(function ($locationProvider, $urlRouterProvider, $stateProvider) {
+app.config(['$locationProvider', '$urlRouterProvider', '$stateProvider', function ($locationProvider, $urlRouterProvider, $stateProvider) {
     // If the URL does not correspond to anything then redirect to '/'
     $urlRouterProvider.otherwise('/');
 
@@ -35,7 +35,7 @@ app.config(function ($locationProvider, $urlRouterProvider, $stateProvider) {
 
     // configure html5 to get links working on jsfiddle
     //$locationProvider.html5Mode(true);
-});
+}]);
 
 // TODO vedere se serve definire direttive custom o se ce la caviamo con quelle esistenti
 app.directive('myDirective', function () {

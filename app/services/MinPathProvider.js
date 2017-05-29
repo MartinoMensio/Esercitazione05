@@ -1,6 +1,8 @@
 var app = angular.module('App');
 
-app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q', '$timeout', function (FakeBestPath, linee, MongoRestClient, $q, $timeout) {
+app.factory('MinPathProvider', ['FakeBestPath', 'DataProvider', 'MongoRestClient', '$q', '$timeout', function (FakeBestPath, DataProvider, MongoRestClient, $q, $timeout) {
+
+    var stops = DataProvider.getStops();
 
     // returns a RGB color with luminance not greater than 50% and saturation 100%
     var getRandomColor = function (mode) {
@@ -40,12 +42,12 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         }
         if (edge.mode) {
             // this is a walk edge
-            var srcStop = linee.stops.find(s => s.id === edge.idSource);
+            var srcStop = stops.find(s => s.id === edge.idSource);
             if (srcStop) {
                 // add the stop coordinates to the array
                 result.data.coordinates.push([srcStop.latLng[1], srcStop.latLng[0]]);
             }
-            var dstStop = linee.stops.find(s => s.id === edge.idDestination);
+            var dstStop = stops.find(s => s.id === edge.idDestination);
             if (dstStop) {
                 // add the stop coordinates to the array
                 result.data.coordinates.push([dstStop.latLng[1], dstStop.latLng[0]]);
@@ -53,7 +55,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         } else {
             // this is a bus edge
             edge.stopsId.forEach(function (stopId) {
-                var stop = linee.stops.find(s => s.id === stopId);
+                var stop = stops.find(s => s.id === stopId);
                 if (stop) {
                     // add the stop coordinates to the array
                     result.data.coordinates.push([stop.latLng[1], stop.latLng[0]]);
@@ -64,7 +66,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
     }
 
     var getEdgeSourceMarker = function (edge) {
-        var srcStop = linee.stops.find(s => s.id === edge.idSource);
+        var srcStop = stops.find(s => s.id === edge.idSource);
         var result = {
             lat: srcStop.latLng[0],
             lng: srcStop.latLng[1],
@@ -115,8 +117,8 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
             geojson: [],
             markers: {}
         }
-        var firstStop = linee.stops.find(s => s.id === minPath.edges[0].idSource);
-        var lastStop = linee.stops.find(s => s.id === minPath.edges[minPath.edges.length - 1].idDestination);
+        var firstStop = stops.find(s => s.id === minPath.edges[0].idSource);
+        var lastStop = stops.find(s => s.id === minPath.edges[minPath.edges.length - 1].idDestination);
 
         // add the first edge
         result.geojson.push(createEdge([src.lat, src.lng], firstStop.latLng, 'walk from the selected location to the stop ' + firstStop.id));
@@ -142,7 +144,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
     var findNearestStop = function (point) {
         var minDistSq = Infinity;
         var bestStop = null;
-        linee.stops.forEach(function (stop) {
+        stops.forEach(function (stop) {
             var distSq = Math.pow(point.lat - stop.latLng[0], 2) + Math.pow(point.lng - stop.latLng[1], 2);
             if (distSq < minDistSq) {
                 bestStop = stop;

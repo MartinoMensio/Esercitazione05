@@ -1,7 +1,7 @@
 var app = angular.module('App');
 
-app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$location', 'leafletData', 'DataProvider', 'MinPathProvider', 'GeocodingService',
-    function ($scope, leafletMapEvents, $routeParams, $location, leafletData, DataProvider, MinPathProvider, GeocodingService) {
+app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$location', 'MinPathProvider', 'GeocodingService',
+    function ($scope, leafletMapEvents, $routeParams, $location, MinPathProvider, GeocodingService) {
 
         angular.extend($scope, leafletMapEvents, {
             center: {
