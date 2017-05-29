@@ -18,7 +18,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
 
     // returns the geojson for an edge
     var getEdgeFeature = function (edge) {
-        var msg = edge.mode ? 'camminare dalla fermata ' + edge.idSource + ' alla fermata ' + edge.idDestination : 'salire su ' + edge.lineId + ' dalla fermata ' + edge.idSource + ' alla fermata ' + edge.idDestination;
+        var msg = edge.mode ? 'walk from stop ' + edge.idSource + ' to stop ' + edge.idDestination : 'take line ' + edge.lineId + ' from stop ' + edge.idSource + ' to stop ' + edge.idDestination;
         var result = {
             data: {
                 type: "LineString",
@@ -72,9 +72,9 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
             message: '<h3>' + srcStop.id + ' - ' + srcStop.name + '</h3>'
         }
         if (edge.mode) {
-            result.message += 'procedere a piedi';
+            result.message += 'proceed by walk';
         } else {
-            result.message += 'prendere linea ' + edge.lineId;
+            result.message += 'take the line ' + edge.lineId;
         }
         return result;
     };
@@ -119,7 +119,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         var lastStop = linee.stops.find(s => s.id === minPath.edges[minPath.edges.length - 1].idDestination);
 
         // add the first edge
-        result.geojson.push(createEdge([src.lat, src.lng], firstStop.latLng, 'partire a piedi dalla posizione selezionata e raggiungere la fermata ' + firstStop.id));
+        result.geojson.push(createEdge([src.lat, src.lng], firstStop.latLng, 'walk from the selected location to the stop ' + firstStop.id));
         minPath.edges.forEach(function (edge) {
             var edgeFeature = getEdgeFeature(edge);
             // nested geojson for the edge
@@ -129,12 +129,12 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
             result.markers[edge.idSource] = edgeSourceMarker;
         }, this);
         // add the last edge
-        result.geojson.push(createEdge(lastStop.latLng, [dst.lat, dst.lng], 'percorrere a piedi dalla fermata ' + lastStop.id + ' alla destinazione'));
+        result.geojson.push(createEdge(lastStop.latLng, [dst.lat, dst.lng], 'walk from stop ' + lastStop.id + ' to your destination'));
         // add three more markers (one for source, one for destination and one for penultimate)
         // those three markers are not built in the for loop because they are not source of an edge represented in the MinPath
-        result.markers['source'] = createMarker([src.lat, src.lng], 'Partire a piedi');
-        result.markers['penultimate'] = createMarker(lastStop.latLng, '<h3>' + lastStop.id + ' - ' + lastStop.name + '</h3>procedere a piedi');
-        result.markers['destination'] = createMarker([dst.lat, dst.lng], 'destinazione raggiunta');
+        result.markers['source'] = createMarker([src.lat, src.lng], 'Walk away');
+        result.markers['penultimate'] = createMarker(lastStop.latLng, '<h3>' + lastStop.id + ' - ' + lastStop.name + '</h3>by walk');
+        result.markers['destination'] = createMarker([dst.lat, dst.lng], 'destination reached');
         return result;
     }
 

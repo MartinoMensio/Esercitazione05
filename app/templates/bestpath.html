@@ -3,12 +3,12 @@
 	<div class="row">
 		<div class="col-sm-6">
 			<h3>Click on the map two locations or search in the boxes</h3>
-			<form>
+			<form name="searchForm">
 				<div class="form-group">
 					<label for="sourceStr">Source</label>
-					<input ng-model="sourceStr" ng-model-options="{ debounce: 1000 }" ng-change="geocodeSrc()" class="form-control" id="sourceStr" placeholder="from where?" />
+					<input ng-model="sourceStr" ng-model-options="{ debounce: 1000 }" ng-change="geocodeSrc()" class="form-control" id="sourceStr" placeholder="from where?" required />
 					<label for="destinationStr">Destination</label>
-					<input ng-model="destinationStr" ng-model-options="{ debounce: 1000 }" ng-change="geocodeDst()" class="form-control" id="destinationStr" placeholder="to where?" />
+					<input ng-model="destinationStr" ng-model-options="{ debounce: 1000 }" ng-change="geocodeDst()" class="form-control" id="destinationStr" placeholder="to where?" required />
 				</div>
 <!--
 				<div class="form-group">
@@ -28,7 +28,7 @@
 				</div>
 -->
 				<div class="form-group" id="button-form-group">
-					<button type="submit" class="btn btn-primary" ng-click="findPath()">Submit</button>
+					<button type="submit" class="btn btn-primary" ng-click="findPath()" ng-disabled="searchForm.$invalid">Submit</button>
 					<button type="button" class="btn btn-primary" ng-click="removeMarkers()" >Remove</button>
 				</div>
 
@@ -39,14 +39,14 @@
 			<h2> Table of the stops </h2>
 			<table class="table">
 				<thead>
-					<td>Linea</td>
-					<td>Descrizione</td>
+					<td>Line</td>
+					<td>Description</td>
 				</thead>
 				<tbody>
 					<!-- Here should be filled with the values of all the stops of the path selected -->
 					<tbody>
 						<tr ng-repeat="edge in geojson">
-							<td>{{edge.data.properties.lineId ? edge.data.properties.lineId : 'a piedi'}}</td>
+							<td>{{edge.data.properties.lineId ? edge.data.properties.lineId : 'by walk'}}</td>
 							<td>{{edge.data.properties.msg}}</td>
 						</tr>
 					</tbody>
