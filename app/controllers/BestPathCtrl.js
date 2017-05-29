@@ -23,8 +23,13 @@ app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$
         };
         this.legend = {
             position: 'bottomleft',
-            colors: ['#ff0000', '#28c9ff', '#0000ff', '#ecf386'],
-            labels: ['National Cycle Route', 'Regional Cycle Route', 'Local Cycle Network', 'Cycleway']
+            colors: ['#0064c8', '#ff6400'],
+            labels: ['Walk', 'Bus']
+        };
+        this.tiles = {
+            name: 'MapBox',
+            url: '//api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+            type: 'xyz'
         };
 
         // handle user adding a marker

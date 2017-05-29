@@ -3,18 +3,28 @@ var app = angular.module('App');
 app.factory('MinPathProvider', ['FakeBestPath', 'DataProvider', 'MongoRestClient', '$q', '$timeout', function (FakeBestPath, DataProvider, MongoRestClient, $q, $timeout) {
 
     var stops = DataProvider.getStops();
+    var last_color_modified = 0;
 
     // returns a RGB color with luminance not greater than 50% and saturation 100%
-    var getRandomColor = function (mode) {
-        // TODO consider mode to provide color consistent with the map legend
-        var rgb_out = Math.floor(2.9999 * Math.random());
+    var getColor = function (mode) {
+        // cycle the variation from 0 to 3
+        last_color_modified = (++last_color_modified) % 4;
+
+        if (mode) {
+            // walking color (near blue)
+            var rgb_base = [0, 50, 200];
+        } else {
+            // bus color (near orange)
+            var rgb_base = [255, 50, 0];
+        }
+        // change in cycle the green
+        rgb_base[1] += 50 * last_color_modified;
         var result = '#';
         for (var index = 0; index < 3; index++) {
-            var r_256 = ((1 << 8) * Math.random() | 0).toString(16);
+            var r_256 = rgb_base[index].toString(16);
             var padded = '00'.substring(r_256.length) + r_256;
-            result += (index != rgb_out) ? padded : '00';
+            result += padded;
         }
-        console.log(result);
         return result;
     }
 
@@ -35,7 +45,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'DataProvider', 'MongoRestClient
                 }
             },
             style: {
-                color: getRandomColor(edge.mode),
+                color: getColor(edge.mode),
                 weight: 5,
                 opacity: 1
             }
@@ -94,7 +104,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'DataProvider', 'MongoRestClient
                 }
             },
             style: {
-                color: getRandomColor(true),
+                color: getColor(true),
                 weight: 5,
                 opacity: 1
             }
