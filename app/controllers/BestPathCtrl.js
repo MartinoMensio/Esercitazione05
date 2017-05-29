@@ -49,7 +49,7 @@ app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$
 
         $scope.removeMarkers = function () {
             $scope.markers = {};
-            $scope.geojson = {};
+            $scope.geojson = [];
         }
 
         $scope.findPath = function () {

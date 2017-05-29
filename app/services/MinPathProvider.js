@@ -18,7 +18,8 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
 
     // returns the geojson for an edge
     var getEdgeFeature = function (edge) {
-        result = {
+        var msg = edge.mode ? 'camminare dalla fermata ' + edge.idSource + ' alla fermata ' + edge.idDestination : 'salire su ' + edge.lineId + ' dalla fermata ' + edge.idSource + ' alla fermata ' + edge.idDestination;
+        var result = {
             data: {
                 type: "LineString",
                 coordinates: [],
@@ -27,7 +28,8 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
                     mode: edge.mode,
                     lineId: edge.lineId,
                     srcId: edge.idSource,
-                    dstId: edge.idDestination
+                    dstId: edge.idDestination,
+                    msg: msg
                 }
             },
             style: {
@@ -77,7 +79,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         return result;
     };
 
-    var createEdge = function (src, dst) {
+    var createEdge = function (src, dst, msg) {
         return {
             data: {
                 type: "LineString",
@@ -86,8 +88,7 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
                     name: "line",
                     mode: true,
                     lineId: null,
-                    srcId: null, // TODO the first and last edge also have info on stop
-                    dstId: null
+                    msg: msg
                 }
             },
             style: {
@@ -111,37 +112,26 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
     var getResultFromMinPath = function (minPath, src, dst) {
         var result = {
             // is filled later
-            geojson: {},
+            geojson: [],
             markers: {}
         }
-        /*
-               // add a walking edge at the beginning from the clicked point
-               minPath.edges.unshift({
-                   idSource: "SRC",
-                   idDestination: minPath.edges[0].idSource,
-                   mode: true,
-                   lineId: null,
-               });
-               // and a walking edge at the end of the found path to the second clicked point
-               minPath.edges.push({
-                   idSource: minPath.edges[minPath.edges.length -1].idSource,
-                   idDestination: "DST",
-                   mode: true,
-                   lineId: null
-               });
-       */
+        var firstStop = linee.stops.find(s => s.id === minPath.edges[0].idSource);
+        var lastStop = linee.stops.find(s => s.id === minPath.edges[minPath.edges.length - 1].idDestination);
+
+        // add the first edge
+        result.geojson.push(createEdge([src.lat, src.lng], firstStop.latLng, 'partire a piedi dalla posizione selezionata e raggiungere la fermata ' + firstStop.id));
         minPath.edges.forEach(function (edge) {
             var edgeFeature = getEdgeFeature(edge);
             // nested geojson for the edge
-            result.geojson[edge.idSource + '_' + edge.idDestination] = edgeFeature;
+            result.geojson.push(edgeFeature);
             // get a marker for the source of the edge
             var edgeSourceMarker = getEdgeSourceMarker(edge);
             result.markers[edge.idSource] = edgeSourceMarker;
         }, this);
-        var firstStop = linee.stops.find(s => s.id === minPath.edges[0].idSource);
-        var lastStop = linee.stops.find(s => s.id === minPath.edges[minPath.edges.length - 1].idDestination);
-        result.geojson['first'] = createEdge([src.lat, src.lng], firstStop.latLng);
-        result.geojson['last'] = createEdge(lastStop.latLng, [dst.lat, dst.lng]);
+        // add the last edge
+        result.geojson.push(createEdge(lastStop.latLng, [dst.lat, dst.lng], 'percorrere a piedi dalla fermata ' + lastStop.id + ' alla destinazione'));
+        // add three more markers (one for source, one for destination and one for penultimate)
+        // those three markers are not built in the for loop because they are not source of an edge represented in the MinPath
         result.markers['source'] = createMarker([src.lat, src.lng], 'Partire a piedi');
         result.markers['penultimate'] = createMarker(lastStop.latLng, '<h3>' + lastStop.id + ' - ' + lastStop.name + '</h3>procedere a piedi');
         result.markers['destination'] = createMarker([dst.lat, dst.lng], 'destinazione raggiunta');
@@ -166,11 +156,11 @@ app.factory('MinPathProvider', ['FakeBestPath', 'Linee', 'MongoRestClient', '$q'
         // src and dst are objects {lat,lng}
         // useRealMinPath true means that a connection to MongoRest will be done to get a MinPath
         getMinPathBetween: function (src, dst, useRealMinPath = false) {
-            // TODO get a real best path using src and dst
             var path = null;
             if (useRealMinPath) {
                 var srcStopId = findNearestStop(src).id;
                 var dstStopId = findNearestStop(dst).id;
+                // try getting a real best path using src and dst
                 return MongoRestClient.getMinPath(srcStopId, dstStopId).then(function (result) {
                     // convert from MinPath to geojson
                     return getResultFromMinPath(result, src, dst);
