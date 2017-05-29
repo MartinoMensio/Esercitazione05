@@ -2,42 +2,47 @@ var app = angular.module('App');
 
 app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$location', 'MinPathProvider', 'GeocodingService',
     function ($scope, leafletMapEvents, $routeParams, $location, MinPathProvider, GeocodingService) {
+        // save reference to the controller for functions that execute out of scope
+        var self = this;
 
-        angular.extend($scope, leafletMapEvents, {
-            center: {
-                lat: 45.064,
-                lng: 7.681,
-                zoom: 13
-            },
-            defaults: {
-                scrollWheelZoom: false
-            },
-            markers: {
-            },
-            events: {
-                map: {
-                    enable: ['zoomstart', 'drag', 'click', 'mousemove'],
-                    logic: 'emit'
-                }
-            },
-            legend: {
-                position: 'bottomleft',
-                colors: ['#ff0000', '#28c9ff', '#0000ff', '#ecf386'],
-                labels: ['National Cycle Route', 'Regional Cycle Route', 'Local Cycle Network', 'Cycleway']
-            },
-        });
+        // initialize the map
+        this.center = {
+            lat: 45.064,
+            lng: 7.681,
+            zoom: 13
+        };
+        this.defaults = {
+            scrollWheelZoom: false
+        };
+        this.markers = {};
+        this.events = {
+            map: {
+                enable: ['zoomstart', 'drag', 'click', 'mousemove'],
+                logic: 'emit'
+            }
+        };
+        this.legend = {
+            position: 'bottomleft',
+            colors: ['#ff0000', '#28c9ff', '#0000ff', '#ecf386'],
+            labels: ['National Cycle Route', 'Regional Cycle Route', 'Local Cycle Network', 'Cycleway']
+        };
 
+        // handle user adding a marker
         $scope.$on("leafletDirectiveMap.click", function (event, args) {
-            if (Object.keys($scope.markers).length < 2) {
-                var key = Object.keys($scope.markers).length == 0 ? 'source' : 'destination';
+            // check how many markers are there on the map
+            if (Object.keys(self.markers).length < 2) {
+                // decide if this is the source (first marker) or the destination (second marker)
+                var key = Object.keys(self.markers).length == 0 ? 'source' : 'destination';
                 var leafEvent = args.leafletEvent;
-                $scope.markers[key] = {
+                // build the marker
+                self.markers[key] = {
                     lat: leafEvent.latlng.lat,
                     lng: leafEvent.latlng.lng,
                     message: key,
                     draggable: true
                 };
-                $scope[key + 'Str'] = 'set on map';
+                // update the search form
+                self[key + 'Str'] = 'set on map';
             }
         });
 
@@ -48,33 +53,34 @@ app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$
             //$scope.markers[0].lng = args.model.lng;
         });
 
-        $scope.removeMarkers = function () {
-            $scope.markers = {};
-            $scope.geojson = [];
-            $scope.sourceStr = '';
-            $scope.destinationStr = '';
+        this.removeMarkers = function () {
+            self.markers = {};
+            self.geojson = [];
+            self.sourceStr = '';
+            self.destinationStr = '';
         }
 
-        $scope.findPath = function () {
-            var source = $scope.markers['source'];
-            var destination = $scope.markers['destination'];
+        // use the service to get the suggested path
+        this.findPath = function () {
+            var source = self.markers['source'];
+            var destination = self.markers['destination'];
             if (source && destination) {
                 MinPathProvider.getMinPathBetween(source, destination, true).then(function (result) {
-                    $scope.geojson = result.geojson;
-                    $scope.markers = result.markers;
+                    self.geojson = result.geojson;
+                    self.markers = result.markers;
                 });
             }
         }
 
-        $scope.geocodeSrc = function() {
-            GeocodingService.getLocationFromString($scope.sourceStr).then(function(result) {
-                $scope.markers['source'] = result.geometry.location;
+        this.geocodeSrc = function () {
+            GeocodingService.getLocationFromString(self.sourceStr).then(function (result) {
+                self.markers['source'] = result.geometry.location;
             })
         }
 
-        $scope.geocodeDst = function() {
-            GeocodingService.getLocationFromString($scope.destinationStr).then(function(result) {
-                $scope.markers['destination'] = result.geometry.location;
+        this.geocodeDst = function () {
+            GeocodingService.getLocationFromString(self.destinationStr).then(function (result) {
+                self.markers['destination'] = result.geometry.location;
             })
         }
     }

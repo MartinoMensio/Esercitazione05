@@ -6,9 +6,9 @@
 			<form name="searchForm">
 				<div class="form-group">
 					<label for="sourceStr">Source</label>
-					<input ng-model="sourceStr" ng-model-options="{ debounce: 1000 }" ng-change="geocodeSrc()" class="form-control" id="sourceStr" placeholder="from where?" required />
+					<input ng-model="ctrl.sourceStr" ng-model-options="{ debounce: 1000 }" ng-change="ctrl.geocodeSrc()" class="form-control" id="sourceStr" placeholder="from where?" required />
 					<label for="destinationStr">Destination</label>
-					<input ng-model="destinationStr" ng-model-options="{ debounce: 1000 }" ng-change="geocodeDst()" class="form-control" id="destinationStr" placeholder="to where?" required />
+					<input ng-model="ctrl.destinationStr" ng-model-options="{ debounce: 1000 }" ng-change="ctrl.geocodeDst()" class="form-control" id="destinationStr" placeholder="to where?" required />
 				</div>
 <!--
 				<div class="form-group">
@@ -28,8 +28,8 @@
 				</div>
 -->
 				<div class="form-group" id="button-form-group">
-					<button type="submit" class="btn btn-primary" ng-click="findPath()" ng-disabled="searchForm.$invalid">Submit</button>
-					<button type="button" class="btn btn-primary" ng-click="removeMarkers()" >Remove</button>
+					<button type="submit" class="btn btn-primary" ng-click="ctrl.findPath()" ng-disabled="searchForm.$invalid">Submit</button>
+					<button type="button" class="btn btn-primary" ng-click="ctrl.removeMarkers()" >Remove</button>
 				</div>
 
 			</form>
@@ -45,7 +45,7 @@
 				<tbody>
 					<!-- Here should be filled with the values of all the stops of the path selected -->
 					<tbody>
-						<tr ng-repeat="edge in geojson">
+						<tr ng-repeat="edge in ctrl.geojson">
 							<td>{{edge.data.properties.lineId ? edge.data.properties.lineId : 'by walk'}}</td>
 							<td>{{edge.data.properties.msg}}</td>
 						</tr>
@@ -54,7 +54,7 @@
 			</table>
 		</div>
 		<div class="col-sm-6">
-			<leaflet geojson-nested="true" geojson="geojson" markers="markers" center="center" event-broadcast="events" legend="legend" height="480px"></leaflet>	
+			<leaflet geojson-nested="true" geojson="ctrl.geojson" markers="ctrl.markers" center="ctrl.center" event-broadcast="ctrl.events" legend="ctrl.legend" height="480px"></leaflet>	
 		</div>
 	</div>
 </div>
