@@ -21,9 +21,6 @@ app.factory('GeocodingService', ['$http', '$q', 'DataProvider', function ($http,
         // look at res.geometry.location for latlng
         getLocationFromString: function (queryString) {
             var deferred = $q.defer();
-            //$httpProvider.defaults.useXDomain = true;
-            //delete $httpProvider.defaults.headers.common['X-Requested-With'];
-            //delete $http.defaults.headers.common['X-Requested-With']; 
             $http({
                 method: 'GET',
                 url: 'https://maps.googleapis.com/maps/api/geocode/json',
@@ -34,7 +31,6 @@ app.factory('GeocodingService', ['$http', '$q', 'DataProvider', function ($http,
                     bounds: minLatLng + '|' + maxLatLng
                 }
             }).then(function (response) {
-                console.log(response);
                 // take the first result
                 deferred.resolve(response.data.results[0]);
             }, function (response) {
