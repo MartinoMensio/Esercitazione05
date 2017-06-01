@@ -1,7 +1,4 @@
 /* general css */
-body {
-	/* padding-top: 70px; */ /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-}
 
 .container {
 	width: 95%;
@@ -14,6 +11,25 @@ body {
 .thumbnail .caption-full {
 	padding: 9px;
 	color: #333;
+}
+
+.containerFooter {
+	width: auto;
+	max-width: 680px;
+	padding: 0 0px;
+	margin: 0 auto;
+}
+
+.containerFooter .text-muted {
+	margin: 20px 0;
+	text-align: center;
+}
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 60px;
+	background-color: #f5f5f5;
 }
 
 /* index.html css */
@@ -62,4 +78,51 @@ body {
 	float: left;
 	margin-right: 8px;
 	opacity: 0.7;
+}
+
+#navbar-left {
+	float: left;
+}
+
+#navbar-right {
+	float: right;
+	text-align: center;
+	margin-top: 0px;
+}
+
+.container {
+	margin-top: 40px;
+}
+
+.containerNavbar {
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+.logoChat {
+	color: red;
+}
+
+.logoTo {
+	color: green;
+}
+
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	margin-bottom: 60px; /* Margin bottom by footer height */
+}
+
+/* about */
+#row-about{
+	width: 900px;
+	float: none;
+	margin: 0 auto;
+}
+
+#row-edit-profile{
+	width: 100%;
 }

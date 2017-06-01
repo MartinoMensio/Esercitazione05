@@ -11,6 +11,16 @@ app.config(['$locationProvider', '$urlRouterProvider', '$stateProvider', functio
             url: '/',
             templateUrl: 'templates/home.html',
         })
+		// About page state
+        .state('about', {
+            url: '/about',
+            templateUrl: 'templates/about.html',
+        })
+		// Contact page state
+		.state('contact', {
+			url: '/contact',
+			templateUrl: 'templates/contact.html',
+		})
         // Bus lines list page
         .state('busLines', {
             url: '/busLines',
