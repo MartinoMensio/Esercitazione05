@@ -34,7 +34,7 @@ app.factory('DataProvider', ['Linee',
                     lat: stop.latLng[0],
                     lng: stop.latLng[1],
                     focus: false,
-                    message: '<h3>' + stop.name + '</h3>' + lines
+                    message: '<h3>' + stop.id + ' - '+ stop.name + '</h3>' + lines
                 }
             }, this);
 
