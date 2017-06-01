@@ -1,13 +1,14 @@
 <!-- -->
-<div class="container">
-    <div class="col-sm-4">
+<div class="container" style="margin-top:40px;">
+    <div class="col-sm-6">
+		<h3>Select a line to see the map</h3>
         <div class="input-group">
             <input ng-model="ctrl.searchText" ng-change="ctrl.showResult()" type="text" class="form-control" placeholder="Search a line...">
             <span class="input-group-btn">
                 <button class="btn btn-secondary" ng-click="ctrl.showAll()" type="button">Show all</button>
             </span>
         </div>
-        <div style="max-height: 300px;overflow-y: scroll;">
+        <div style="max-height: 400px;overflow-y: scroll;">
             <table class="table" ng-if="ctrl.showList">
                 <thead>
                     <td>Line</td>
@@ -23,7 +24,7 @@
         </div>
     </div>
 
-    <div class="col-sm-8">
-        <div ui-view><h3>Select a line to see the map</h3></div>
+    <div class="col-sm-6" style="margin-top:40px;">
+        <div ui-view></div>
     </div>
 </div>
