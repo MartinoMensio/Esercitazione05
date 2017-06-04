@@ -23,25 +23,37 @@ app.controller('MainCtrl', ['$scope', 'leafletData', 'DataProvider', '$statePara
 
         // variable that controls the visualization of the whole list
         this.showList = false;
+        this.searchText = "";
+        this.buttonText = "Show all"
 
         // control wether it is necessary to show or not the whole list
         this.showAll = function() {
-            this.searchText = "";
-
-            if (this.showList == true) {
-                this.showList = false;
+            if (this.searchText.localeCompare("") != 0) {
+                this.searchText = "";
+                this.showList = true;
+                this.buttonText = "Hide";
             }
             else {
-                this.showList = true;
+                if (this.showList == true) {
+                    this.showList = false;
+                    this.buttonText = "Show all";
+                }
+                else {
+                    this.showList = true;
+                    this.buttonText = "Hide";
+                }
             }
         }
 
         // control wether it is necessary to show or not the list when search text is written
         this.showResult = function() {
-            if (this.searchText != "")
+            if (this.searchText.localeCompare("") != 0) {
                 this.showList = true;
+                this.buttonText = "Show all";
+            }
             else {
                 this.showList = false;
+                //this.buttonText = "Show all";
             }
         }
     }

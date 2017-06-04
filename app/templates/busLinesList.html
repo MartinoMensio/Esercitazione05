@@ -5,7 +5,7 @@
         <div class="input-group">
             <input ng-model="ctrl.searchText" ng-change="ctrl.showResult()" type="text" class="form-control" placeholder="Search a line...">
             <span class="input-group-btn">
-                <button class="btn btn-secondary" ng-click="ctrl.showAll()" type="button">Show all</button>
+                <button class="btn btn-secondary" ng-click="ctrl.showAll()" type="button">{{ctrl.buttonText}}</button>
             </span>
         </div>
         <div style="max-height: 400px;overflow-y: scroll;">
