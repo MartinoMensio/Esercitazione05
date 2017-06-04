@@ -59,7 +59,6 @@ app.controller('MainCtrl', ['$scope', 'leafletData', 'DataProvider', '$statePara
             }
             else {
                 this.showList = false;
-                //this.buttonText = "Show all";
             }
         }
     }
