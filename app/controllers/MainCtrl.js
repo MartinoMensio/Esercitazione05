@@ -14,6 +14,12 @@ app.controller('MainCtrl', ['$scope', 'leafletData', 'DataProvider', '$statePara
             });
         }
 
+        this.tiles = {
+            name: 'MapBox',
+            url: '//api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+            type: 'xyz'
+        };
+
         // define the map centering
         this.center = { 
             lat: 45.064, 
