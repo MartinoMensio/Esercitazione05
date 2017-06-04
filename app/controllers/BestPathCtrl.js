@@ -1,7 +1,7 @@
 var app = angular.module('App');
 
-app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$location', 'MinPathProvider', 'GeocodingService',
-    function ($scope, leafletMapEvents, $routeParams, $location, MinPathProvider, GeocodingService) {
+app.controller('BestPathCtrl', ['$scope', "leafletData", '$routeParams', '$location', 'MinPathProvider', 'GeocodingService',
+    function ($scope, leafletData, $routeParams, $location, MinPathProvider, GeocodingService) {
 
         // initialize the map
         this.center = {
@@ -29,6 +29,13 @@ app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$
             url: '//api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
             type: 'xyz'
         };
+
+        // define the map centering
+        this.center = {
+            lat: 45.064,
+            lng: 7.681,
+            zoom: 13
+        }
 
         // handle user adding a marker
         $scope.$on("leafletDirectiveMap.click", (event, args) => {
@@ -64,6 +71,9 @@ app.controller('BestPathCtrl', ['$scope', "leafletMapEvents", '$routeParams', '$
                 MinPathProvider.getMinPathBetween(source, destination, true).then((result) => {
                     this.geojson = result.geojson;
                     this.markers = result.markers;
+                    leafletData.getMap().then(function (map) {
+                        map.fitBounds(result.latlngs);
+                    });
                 });
             }
         }

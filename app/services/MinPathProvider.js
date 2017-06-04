@@ -125,7 +125,8 @@ app.factory('MinPathProvider', ['FakeBestPath', 'DataProvider', 'MongoRestClient
         var result = {
             // is filled later
             geojson: [],
-            markers: {}
+            markers: {},
+            latlngs: []
         }
         if (minPath) {
             // min path exists
@@ -153,6 +154,13 @@ app.factory('MinPathProvider', ['FakeBestPath', 'DataProvider', 'MongoRestClient
         }
         result.markers['source'] = createMarker([src.lat, src.lng], 'Walk away');
         result.markers['destination'] = createMarker([dst.lat, dst.lng], 'destination reached');
+        // fill an array of latlng for centering the map
+        result.geojson.forEach(function (feature) {
+            feature.data.coordinates.forEach(function (coordinate) {
+                // transform [x,y] to {lat, lng}
+                result.latlngs.push(L.GeoJSON.coordsToLatLng(coordinate));
+            });
+        });
         return result;
     }
 
